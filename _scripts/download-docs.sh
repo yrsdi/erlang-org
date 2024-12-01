@@ -13,7 +13,7 @@ TOKEN=${2:-"token ${GITHUB_TOKEN}"}
 HDR=(--silent --location --fail --show-error -H "Authorization: ${TOKEN}" -H "X-GitHub-Api-Version: 2022-11-28")
 
 # The files that are involved when generating docs
-SCRIPT_FILES="_scripts/otp_flatten_docs _scripts/otp_flatten_ex_docs _scripts/otp_doc_sitemap.sh"
+SCRIPT_FILES="_scripts/download-docs.sh _scripts/otp_flatten_docs _scripts/otp_flatten_ex_docs _scripts/otp_doc_sitemap.sh"
 
 _get_vsns() {
     grep "${1}" "${OTP_VERSIONS_TABLE}" | awk '{print $1}' | sed 's/OTP-\(.*\)/\1/g'
@@ -30,7 +30,7 @@ _get_doc_hash() {
 
 _flatten_docs() {
     if [ -f "docs/doc-$1/doc/readme.html" ]; then
-        (cd docs && ../_scripts/otp_flatten_ex_docs "doc-$1" "$2")
+        (cd docs && ../_scripts/otp_flatten_ex_docs "doc-$1" "$2" "$3")
     else
         (cd docs && ../_scripts/otp_flatten_docs "doc-$1" "$2")
     fi
@@ -93,12 +93,12 @@ for ARCHIVE in docs/*.tar.gz; do
     echo "Flattening ${MAJOR_VSN}"
     mv "docs/tmp" "docs/doc-${ERTS_VSN}"
     if [ "${MAJOR_VSN}" = "${LATEST_MAJOR_VSN}" ]; then
-        _flatten_docs "${ERTS_VSN}" "${MAJOR_VSN}"
+        _flatten_docs "${ERTS_VSN}" "${MAJOR_VSN}" "${LATEST_MAJOR_VSN}"
         rm -rf "docs/doc" || true
         mv docs/doc-1 docs/doc
         printf -- '---\nlayout: search\nversion: %s\n---\n' "${MAJOR_VSN}" > "docs/doc/search.html"
     fi
-    _flatten_docs "${ERTS_VSN}" "${MAJOR_VSN}"
+    _flatten_docs "${ERTS_VSN}" "${MAJOR_VSN}" "${LATEST_MAJOR_VSN}"
     touch "docs/doc-1/$(_get_doc_hash "${VSN}")"
     rm -rf "docs/${MAJOR_VSN}" || true
     mv docs/doc-1 "docs/${MAJOR_VSN}"
