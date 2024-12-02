@@ -3,26 +3,26 @@ layout: default
 title: "Downloads"
 css: downloads
 ---
+
 <!-- convert page.release to string -->
-{% assign releaseStr = page.release | append: "" %}
-{% assign releaseData = site.data.releases | find: "release", releaseStr %}
-{% assign allReleases = releaseData.patches %}
-{% assign latest = releaseData.latest %}
+{% assign releaseStr = page.release | append: "" %} {% assign releaseData =
+site.data.releases | find: "release", releaseStr %} {% assign allReleases =
+releaseData.patches %} {% assign latest = releaseData.latest %}
 <div class="container body border-top pt-4">
     <main class="main">
         <div class="header pe-lg-4">
             <h1>Erlang/OTP {{ page.name }}</h1>
-            <p>This release of Erlang/OTP can be built from
-                {% if page.release < 27 %} <a
-                    href="{% link /docs/{{ page.release }}/installation_guide/INSTALL.html %}">source</a> or
-                    {% else %}
-                    <a href="{% link /docs/{{ page.release }}/system/install.html %}">source</a> or
-                    {% endif %}
-                    installed using <a href="https://erlang-solutions.com/downloads">pre-built packages</a> for your OS
-                    or
-                    third-party tools (such as <a href="https://github.com/kerl/kerl">kerl</a>, <a
-                        href="https://github.com/asdf-vm/asdf-erlang">asdf</a> or <a
-                        href="https://mise.jdx.dev/lang/erlang.html">mise</a>).
+            <p>
+                This release of Erlang/OTP can be built from {% if page.release < 27 %}
+                <a href="{% link /docs/{{ page.release }}/installation_guide/INSTALL.html %}">source</a>
+                or {% else %}
+                <a href="{% link /docs/{{ page.release }}/system/install.html %}">source</a>
+                or {% endif %} installed using
+                <a href="https://erlang-solutions.com/downloads">pre-built packages</a>
+                for your OS or third-party tools (such as
+                <a href="https://github.com/kerl/kerl">kerl</a>,
+                <a href="https://github.com/asdf-vm/asdf-erlang">asdf</a> or
+                <a href="https://mise.jdx.dev/lang/erlang.html">mise</a>).
             </p>
             <div>
                 <code class="docker">
@@ -31,8 +31,9 @@ css: downloads
             </div>
         </div>
         <div class="links">
-            {% assign latestDocsUrl='/docs/' | append: releaseData.release | relative_url %}
-            {% include downloads-card.html current=page releases=allReleases currentDocsUrl=latestDocsUrl %}
+            {% assign latestDocsUrl='/docs/' | append: releaseData.release |
+            relative_url %} {% include downloads-card.html current=page
+            releases=allReleases currentDocsUrl=latestDocsUrl %}
         </div>
         <div class="content">
             {% if page.Applications %}
@@ -52,8 +53,12 @@ css: downloads
                             </tr>
                             <tr>
                                 <td>Git Tag</td>
-                                <td><a href="https://github.com/erlang/otp/releases/tag/{{ page.GitTag }}">{{
-                                        page.GitTag }}</a></td>
+                                <td>
+                                    <a
+                                        href="https://github.com/erlang/otp/releases/tag/{{ page.GitTag }}"
+                                        >{{ page.GitTag }}</a
+                                    >
+                                </td>
                             </tr>
                             <tr>
                                 <td>Date</td>
@@ -67,21 +72,23 @@ css: downloads
                                 <td>
                                     <div class="trouble-ids">
                                         {% for id in page.TroubleReportId %}
-                                        <div>{% include patch-related-links.html id=id %}</div>
+                                        <div>
+                                            {% include patch-related-links.html
+                                            id=id %}
+                                        </div>
                                         {% endfor %}
                                     </div>
                                 </td>
                             </tr>
-                            {% endif %}
-                            {% endcomment %}
-                            {% if page.Seqnum %}
+                            {% endif %} {% endcomment %} {% if page.Seqnum %}
                             <tr>
                                 <td>Issue Id</td>
                                 <td>
                                     <div class="trouble-ids">
                                         {% for id in page.Seqnum %}
                                         <div>
-                                            {% include patch-related-links.html id=id %}
+                                            {% include patch-related-links.html
+                                            id=id %}
                                         </div>
                                         {% endfor %}
                                     </div>
@@ -108,12 +115,15 @@ css: downloads
                                     </div>
                                 </td>
                             </tr>
-                            {% assign incompatibilities=page.Applications["POTENTIALINCOMPATIBILITIES"] %}
-                            {% if incompatibilities %}
+                            {% assign
+                            incompatibilities=page.Applications["POTENTIALINCOMPATIBILITIES"]
+                            %} {% if incompatibilities %}
                             <tr>
                                 <td></td>
                                 <td>
-                                    <a href="#incompatibilities">Potential Incompatibilities</a>
+                                    <a href="#incompatibilities"
+                                        >Potential Incompatibilities</a
+                                    >
                                 </td>
                             </tr>
                             {% endif %}
@@ -123,34 +133,33 @@ css: downloads
             </div>
             <div class="row row-cols-1 g-4">
                 <div class="col">
-                    {% assign highlights=page.Applications["HIGHLIGHTS"] %}
-                    {% include patch-application.html name="highlights" title="Highlights" app=highlights %}
+                    {% assign highlights=page.Applications["HIGHLIGHTS"] %} {%
+                    include patch-application.html name="highlights"
+                    title="Highlights" app=highlights %}
                 </div>
                 <div class="col">
-                    {% include patch-application.html name="incompatibilities" title="Potential Incompatibilities"
-                    app=incompatibilities mode=mode %}
+                    {% include patch-application.html name="incompatibilities"
+                    title="Potential Incompatibilities" app=incompatibilities
+                    mode=mode %}
                 </div>
-                {% for app in page.Applications %}
-                {% assign name=app[0] %}
-
-                {% if name != "HIGHLIGHTS" and name != "POTENTIALINCOMPATIBILITIES" and name != "Thanksto" %}
+                {% for app in page.Applications %} {% assign name=app[0] %} {%
+                if name != "HIGHLIGHTS" and name != "POTENTIALINCOMPATIBILITIES"
+                and name != "Thanksto" %}
                 <div class="col">
-                    {% assign content=app[1] %}
-                    {% include patch-application.html name=name title=name app=content %}
+                    {% assign content=app[1] %} {% include
+                    patch-application.html name=name title=name app=content %}
                 </div>
-                {% endif %}
-                {% endfor %}
+                {% endif %} {% endfor %}
                 <div class="col">
-                    {% assign thanks=page.Applications["Thanksto"] %}
-                    {% include patch-application.html name="thanks" title="Thanks To"
+                    {% assign thanks=page.Applications["Thanksto"] %} {% include
+                    patch-application.html name="thanks" title="Thanks To"
                     app=thanks %}
                 </div>
             </div>
-            {% else %}
-            {{ page.content }}
-            {% endif %}
+            {% else %} {{ page.content }} {% endif %}
         </div>
-        {% include downloads-sidebar.html currentRelease=releaseData currentPatch=page.name %}
+        {% include downloads-sidebar.html currentRelease=releaseData
+        currentPatch=page.name %}
     </main>
 </div>
 <script src="{{'/assets/js/prismjs/prism.js' | prepend: site.baseurl }}"></script>
